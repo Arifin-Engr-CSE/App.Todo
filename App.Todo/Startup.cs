@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 using App.Todo.Authentication;
 using App.Todo.Models;
 
-namespace ToDoAPI
+namespace App.Todo
 {
     public class Startup
     {
@@ -36,7 +36,7 @@ namespace ToDoAPI
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ToDoAPI", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "App.Todo", Version = "v1" });
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -74,7 +74,7 @@ namespace ToDoAPI
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ToDoAPI v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "App.Todo v1"));
             }
 
             app.UseAuthentication();
