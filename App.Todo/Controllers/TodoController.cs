@@ -6,54 +6,52 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using App.Todo.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace App.Todo.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class ToDoItemController : ControllerBase
+    public class TodoController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public ToDoItemController(ApplicationDbContext context)
+        public TodoController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/ToDoItem
+        // GET: api/Todo
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ToDoItemModel>>> GetToDoItems()
+        public async Task<ActionResult<IEnumerable<ToDoItemModel>>> GetTodos()
         {
-            return await _context.ToDoItems.ToListAsync();
+            return await _context.Todos.ToListAsync();
         }
 
-        // GET: api/ToDoItem/5
+        // GET: api/Todo/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ToDoItemModel>> GetToDoItemModel(int id)
+        public async Task<ActionResult<ToDoItemModel>> GetTodo(int id)
         {
-            var toDoItemModel = await _context.ToDoItems.FindAsync(id);
+            var todo = await _context.Todos.FindAsync(id);
 
-            if (toDoItemModel == null)
+            if (todo == null)
             {
                 return NotFound();
             }
 
-            return toDoItemModel;
+            return todo;
         }
 
-        // PUT: api/ToDoItem/5
+        // PUT: api/Todo/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutToDoItemModel(int id, ToDoItemModel toDoItemModel)
+        public async Task<IActionResult> PutTodo(int id, ToDoItemModel todo)
         {
-            if (id != toDoItemModel.ItemId)
+            if (id != todo.id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(toDoItemModel).State = EntityState.Modified;
+            _context.Entry(todo).State = EntityState.Modified;
 
             try
             {
@@ -61,7 +59,7 @@ namespace App.Todo.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ToDoItemModelExists(id))
+                if (!TodoExists(id))
                 {
                     return NotFound();
                 }
@@ -74,36 +72,36 @@ namespace App.Todo.Controllers
             return NoContent();
         }
 
-        // POST: api/ToDoItem
+        // POST: api/Todo
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ToDoItemModel>> PostToDoItemModel(ToDoItemModel toDoItemModel)
+        public async Task<ActionResult<ToDoItemModel>> PostTodo(ToDoItemModel todo)
         {
-            _context.ToDoItems.Add(toDoItemModel);
+            _context.Todos.Add(todo);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetToDoItemModel", new { id = toDoItemModel.ItemId }, toDoItemModel);
+            return CreatedAtAction("GetTodo", new { id = todo.id }, todo);
         }
 
-        // DELETE: api/ToDoItem/5
+        // DELETE: api/Todo/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteToDoItemModel(int id)
+        public async Task<IActionResult> DeleteTodo(int id)
         {
-            var toDoItemModel = await _context.ToDoItems.FindAsync(id);
-            if (toDoItemModel == null)
+            var todo = await _context.Todos.FindAsync(id);
+            if (todo == null)
             {
                 return NotFound();
             }
 
-            _context.ToDoItems.Remove(toDoItemModel);
+            _context.Todos.Remove(todo);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool ToDoItemModelExists(int id)
+        private bool TodoExists(int id)
         {
-            return _context.ToDoItems.Any(e => e.ItemId == id);
+            return _context.Todos.Any(e => e.id == id);
         }
     }
 }

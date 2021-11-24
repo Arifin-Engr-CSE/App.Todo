@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using App.Todo.Authentication;
+
 using App.Todo.Models;
 
 namespace App.Todo
@@ -41,10 +41,6 @@ namespace App.Todo
 
             services.AddDbContext<ApplicationDbContext>(options =>
            options.UseSqlServer(Configuration.GetConnectionString("SQLConnection")));
-
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
 
             services.AddAuthentication(options =>
             {
